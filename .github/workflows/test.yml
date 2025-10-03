@@ -1,0 +1,46 @@
+name: Automated Tests
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  e2e-tests:
+    name: End-to-End Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Start services
+      run: |
+        docker-compose up -d
+        sleep 30
+
+    - name: Install Playwright
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npx playwright install --with-deps
+
+    - name: Run E2E tests
+      working-directory: ./frontend
+      run: npx playwright test
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: playwright-report
+        path: frontend/playwright-report/
+
+    - name: Cleanup
+      if: always()
+      run: docker-compose down
