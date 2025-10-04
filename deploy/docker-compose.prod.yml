@@ -1,33 +1,6 @@
 version: '3.8'
 
 services:
-  # Local PostgreSQL Database
-  db:
-    image: postgres:15-alpine
-    container_name: splitbill-db
-    restart: always
-    environment:
-      POSTGRES_DB: splitbill_db
-      POSTGRES_USER: splitbill_admin
-      POSTGRES_PASSWORD: P0stb@nk2023!
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ../backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
-    networks:
-      - splitbill-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U splitbill_admin -d splitbill_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
   backend:
     build:
       context: ../backend
@@ -41,9 +14,6 @@ services:
       - PORT=5000
     ports:
       - "5000:5000"
-    depends_on:
-      db:
-        condition: service_healthy
     networks:
       - splitbill-network
     healthcheck:
@@ -98,6 +68,3 @@ services:
 networks:
   splitbill-network:
     driver: bridge
-
-volumes:
-  postgres_data:
