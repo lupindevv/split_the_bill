@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Use relative URL so requests go through nginx proxy
-const API_URL = import.meta.env.VITE_API_URL || '';
+// Use production URL by default, or env variable if set
+const API_URL = import.meta.env.VITE_API_URL || 'http://52.213.152.92/api';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -24,33 +24,33 @@ api.interceptors.request.use(
 );
 
 export const authAPI = {
-    login: (email, password) => api.post('/api/auth/login', { email, password }),
-    register: (data) => api.post('/api/auth/register', data),
-    getMe: () => api.get('/api/auth/me')
+    login: (email, password) => api.post('/auth/login', { email, password }),
+    register: (data) => api.post('/auth/register', data),
+    getMe: () => api.get('/auth/me')
 };
 
 export const menuAPI = {
-    getAll: (params) => api.get('/api/menu', { params }),
-    getById: (id) => api.get(`/api/menu/${id}`),
-    create: (data) => api.post('/api/menu', data),
-    update: (id, data) => api.put(`/api/menu/${id}`, data),
-    delete: (id) => api.delete(`/api/menu/${id}`),
-    getCategories: () => api.get('/api/menu/categories')
+    getAll: (params) => api.get('/menu', { params }),
+    getById: (id) => api.get(`/menu/${id}`),
+    create: (data) => api.post('/menu', data),
+    update: (id, data) => api.put(`/menu/${id}`, data),
+    delete: (id) => api.delete(`/menu/${id}`),
+    getCategories: () => api.get('/menu/categories')
 };
 
 export const billAPI = {
-    getAll: (params) => api.get('/api/bills', { params }),
-    getById: (id) => api.get(`/api/bills/${id}`),
-    getByNumber: (billNumber) => api.get(`/api/bills/number/${billNumber}`),
-    getByTableNumber: (tableNumber) => api.get(`/api/bills/table/${tableNumber}`),
-    create: (data) => api.post('/api/bills', data),
-    addItems: (id, data) => api.post(`/api/bills/${id}/items`, data),
-    close: (id) => api.put(`/api/bills/${id}/close`)
+    getAll: (params) => api.get('/bills', { params }),
+    getById: (id) => api.get(`/bills/${id}`),
+    getByNumber: (billNumber) => api.get(`/bills/number/${billNumber}`),
+    getByTableNumber: (tableNumber) => api.get(`/bills/table/${tableNumber}`),
+    create: (data) => api.post('/bills', data),
+    addItems: (id, data) => api.post(`/bills/${id}/items`, data),
+    close: (id) => api.put(`/bills/${id}/close`)
 };
 
 export const paymentAPI = {
-    process: (data) => api.post('/api/payments', data),
-    getAll: (params) => api.get('/api/payments', { params })
+    process: (data) => api.post('/payments', data),
+    getAll: (params) => api.get('/payments', { params })
 };
 
 export default api;
