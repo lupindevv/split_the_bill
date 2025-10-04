@@ -18,11 +18,11 @@ const PORT = process.env.PORT || 5000;
 // CORS Configuration - UPDATED
 app.use(cors({
     origin: [
-        'http://34.243.241.227',
-        'http://34.243.241.227:80',
-        'http://34.243.241.227:3000',
-        'http://34.243.241.227:5173',
-        'http://34.243.241.227:5174'
+        'http://52.213.152.92',
+        'http://52.213.152.92:80',
+        'http://52.213.152.92:3000',
+        'http://52.213.152.92:5173',
+        'http://52.213.152.92:5174'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
